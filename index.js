@@ -29,6 +29,7 @@ app.get('/', (req, res) => {
 })
 
 const generateId = () => {
+  // the '...' is called a spread, and is used to take the array of notes id's and split it into multiple numbers as needed for the math.max
   const maxId = notes.length > 0
     ? Math.max(...notes.map(n => n.id))
     : 0
