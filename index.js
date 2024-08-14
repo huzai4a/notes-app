@@ -145,6 +145,35 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end();
 });
 
+app.post('/api/persons', (req, res) =>{
+  const body = req.body;
+  if (!body.name || !body.number) {
+    return res.status(400).json({ 
+      error: 'content missing' 
+    })
+  }
+
+  // sets newId to an id in the list to enter the while loop 
+  let newId = phoneBook[0].id;
+  // while newId is dupe change it
+  while (phoneBook.map((bookItem)=>{
+    return bookItem.id;
+  }).includes(newId)){
+    // multiplying makes this a number between 0 and 10,000
+    newId = String(Math.floor(Math.random() * 10001));
+  };
+
+  const bookItem = {
+    id: newId,
+    name: body.name,
+    number:  body.number
+  };
+
+  phoneBook = phoneBook.concat(bookItem);
+
+  res.json(phoneBook);
+});
+
 // OPENS SERVER
 
 const PORT = 3001

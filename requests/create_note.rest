@@ -5,3 +5,13 @@ content-type: application/json
     "content": "do not forget to set the right content type",
     "important": true
 }
+
+###
+
+POST http://localhost:3001/api/persons HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Julio Fernandez", 
+    "number": "322-091103"
+}
