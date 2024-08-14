@@ -127,6 +127,17 @@ app.get('/info', (req, res) =>{
   res.send(displayedHTML);
 })
 
+app.get('/api/persons/:id', (req, res) =>{
+  const id = Number(req.params.id);
+  const bookItem = phoneBook.find(bookItem => Number(bookItem.id) === id);
+  
+  if (bookItem) {
+    res.json(bookItem);
+  } else {
+    res.status(404).end()
+  }
+});
+
 // OPENS SERVER
 
 const PORT = 3001
