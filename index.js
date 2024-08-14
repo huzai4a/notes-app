@@ -147,9 +147,17 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (req, res) =>{
   const body = req.body;
+
   if (!body.name || !body.number) {
     return res.status(400).json({ 
       error: 'content missing' 
+    })
+  // error for dupe names
+  } else if (phoneBook.map((bookItem)=>{
+    return bookItem.name;
+  }).includes(body.name)){
+    return res.status(400).json({ 
+      error: 'name must be unique' 
     })
   }
 
