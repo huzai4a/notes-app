@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-//test
+
 let notes = [
   {
     id: 1,
@@ -22,11 +22,39 @@ let notes = [
   }
 ]
 
+let phoneBook = JSON.parse(`[
+  { 
+    "id": "1",
+    "name": "Arto Hellas", 
+    "number": "040-123456"
+  },
+  { 
+    "id": "2",
+    "name": "Ada Lovelace", 
+    "number": "39-44-5323523"
+  },
+  { 
+    "id": "3",
+    "name": "Dan Abramov", 
+    "number": "12-43-234345"
+  },
+  { 
+    "id": "4",
+    "name": "Mary Poppendieck", 
+    "number": "39-23-6423122"
+  }
+]`)
+
+// allows json-parser use (request.body in post) 
 app.use(express.json())
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
+
+
+
+// /API/NOTES SECTION
 
 const generateId = () => {
   // the '...' is called a spread, and is used to take the array of notes id's and split it into multiple numbers as needed for the math.max
@@ -78,6 +106,28 @@ app.get('/api/notes/:id', (request, response) => {
     response.status(404).end()
   }
 })
+
+
+
+//  /API/PERSONS SECTION
+
+app.get('/api/persons', (req, res) =>{
+  res.json(phoneBook);
+});
+
+
+//  /INFO SECTION
+
+app.get('/info', (req, res) =>{
+  let displayedHTML = `
+  <p> Phone book has info for ${phoneBook.length} people</p>
+  <br>
+  <p> ${new Date()}</p>
+  `;
+  res.send(displayedHTML);
+})
+
+// OPENS SERVER
 
 const PORT = 3001
 app.listen(PORT, () => {
