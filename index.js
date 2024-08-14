@@ -45,8 +45,23 @@ let phoneBook = JSON.parse(`[
   }
 ]`)
 
+
 // allows json-parser use (request.body in post) 
 app.use(express.json())
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+app.use(requestLogger)
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
@@ -181,6 +196,9 @@ app.post('/api/persons', (req, res) =>{
 
   res.json(phoneBook);
 });
+
+
+app.use(unknownEndpoint)
 
 // OPENS SERVER
 
