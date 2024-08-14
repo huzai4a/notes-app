@@ -138,6 +138,13 @@ app.get('/api/persons/:id', (req, res) =>{
   }
 });
 
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id);
+  notes = phoneBook.filter(bookItem => Number(bookItem.id) !== id);
+
+  response.status(204).end();
+});
+
 // OPENS SERVER
 
 const PORT = 3001
