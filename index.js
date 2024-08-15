@@ -60,8 +60,12 @@ const requestLogger = (request, response, next) => {
 
 // allows json-parser use (request.body in post) 
 app.use(express.json())
+
+// used to allow the req.body to be sent to morgan middleware
+morgan.token('body', request => JSON.stringify(request.body))
+
 // app.use(requestLogger)
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
@@ -99,9 +103,8 @@ app.post('/api/notes', (request, response) => {
     date: new Date(),
     id: generateId(),
   }
-
+  
   notes = notes.concat(note)
-
   response.json(note)
 })
 
@@ -198,7 +201,6 @@ app.post('/api/persons', (req, res) =>{
   };
 
   phoneBook = phoneBook.concat(bookItem);
-
   res.json(phoneBook);
 });
 
