@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 let notes = [
@@ -46,9 +47,7 @@ let phoneBook = JSON.parse(`[
 ]`)
 
 
-// allows json-parser use (request.body in post) 
-app.use(express.json())
-
+/*
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
@@ -56,7 +55,13 @@ const requestLogger = (request, response, next) => {
   console.log('---')
   next()
 }
-app.use(requestLogger)
+*/
+
+
+// allows json-parser use (request.body in post) 
+app.use(express.json())
+// app.use(requestLogger)
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
@@ -197,7 +202,7 @@ app.post('/api/persons', (req, res) =>{
   res.json(phoneBook);
 });
 
-
+// for unknown routes (no get request there) throw an error message
 app.use(unknownEndpoint)
 
 // OPENS SERVER
